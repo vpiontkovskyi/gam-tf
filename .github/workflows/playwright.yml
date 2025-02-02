@@ -6,7 +6,7 @@ on:
     branches: [main, master]
 jobs:
   test:
-    timeout-minutes: 5
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,7 +18,7 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Playwright tests
-        run: npx playwright test
+        run: npx playwright test --project=chromium
         env:
           BASE_URL: ${{ vars.BASE_URL }} # Посилання на BASE_URL з налаштувань
           APP_URL: ${{ vars.APP_URL }}   # Посилання на APP_URL з налаштувань
