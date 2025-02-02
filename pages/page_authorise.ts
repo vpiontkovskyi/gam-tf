@@ -99,6 +99,12 @@ export class AuthorisePage {
 
   async commitLoginWithEmail(email: string, password: string) {
     await this.navigate();
+
+    // FIXME: This is hotfix
+    if (await this.buttonContinue.isVisible()) {
+      await this.clickButtonContinue();
+    }
+
     await this.verifyTermsAndConditionsLogIn();
     await this.clickTabLogIn();
     await this.clickButtonSignInWithEmail();
@@ -111,6 +117,12 @@ export class AuthorisePage {
 
   async commitRegisterWithEmail(email: string, password: string) {
     await this.navigate();
+
+    // FIXME: This is hotfix
+    if (await this.buttonContinue.isVisible()) {
+      await this.clickButtonContinue();
+    }
+
     await this.verifyTermsAndConditionsLogIn();
     await this.clickTabSignUp();
     await this.verifyTermsAndConditionsSignUp();
