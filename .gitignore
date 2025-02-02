@@ -12,6 +12,5 @@ node_modules/
 .github
 .vale-styles
 .vale.ini
-.env
 /tools
 .DS_Store

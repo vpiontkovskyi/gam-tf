@@ -20,8 +20,8 @@ jobs:
       - name: Run Playwright tests
         run: npx playwright test --project=chromium
         env:
-          BASE_URL: ${{ vars.BASE_URL }} # Посилання на BASE_URL з налаштувань
-          APP_URL: ${{ vars.APP_URL }}   # Посилання на APP_URL з налаштувань
+          BASE_URL: ${{ vars.BASE_URL }}
+          APP_URL: ${{ vars.APP_URL }}
           TEST_USER_LOGIN: ${{ secrets.TEST_USER_LOGIN }}
           TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
       - uses: actions/upload-artifact@v4

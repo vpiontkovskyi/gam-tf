@@ -27,5 +27,6 @@
   "bugs": {
     "url": "https://github.com/vpiontkovskyi/gam-tf/issues"
   },
-  "homepage": "https://github.com/vpiontkovskyi/gam-tf#readme"
+  "homepage": "https://github.com/vpiontkovskyi/gam-tf#readme",
+  "main": "index.js"
 }
