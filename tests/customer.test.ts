@@ -6,6 +6,7 @@ import { DepositPage } from "@pages/page_deposit";
 import { orderDetails, paymentDetails } from "@enum/user_data";
 import * as process from "node:process";
 import { getRandomValuesFromDict } from "@helpers/helper_random";
+import * as config from "../routs.config";
 
 let loginPage: AuthorisePage;
 let ordersPage: OrdersPage;
@@ -21,6 +22,9 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("Create correct order with failed payment wham delete", async () => {
+  console.log(config.test_user_email);
+  console.log(config.test_user_password);
+
   // TODO: Move to interfaces
   const cardDetails = getRandomValuesFromDict(paymentDetails) as {
     cardNumber: string;
