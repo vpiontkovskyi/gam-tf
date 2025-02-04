@@ -1,5 +1,4 @@
-import { defineConfig, devices, test } from "@playwright/test";
-import * as fs from "fs";
+import { defineConfig, devices } from "@playwright/test";
 
 /**
  * Read environment variables from file.
@@ -82,11 +81,4 @@ export default defineConfig({
   //   url: 'http://127.0.0.1:3000',
   //   reuseExistingServer: !process.env.CI,
   // },
-});
-
-test.afterEach(async ({ page }, testInfo) => {
-  if (testInfo.status === "failed") {
-    const html = await page.content();
-    fs.writeFileSync(`failed-${testInfo.title.replace(/\s+/g, "_")}.html`, html);
-  }
 });
