@@ -65,7 +65,7 @@ export class AuthorisePage {
 
   async navigate(url: string = config.app_url + config.login_endpoint) {
     if (this.page.url() !== url) await this.page.goto(url);
-    if (await this.textAwareUK.isVisible()) await this.buttonAwareUKContinue.isVisible();
+    if (await this.textAwareUK.isVisible()) await this.buttonAwareUKContinue.click();
   }
 
   async clickButtonAwareUKContinue() {
