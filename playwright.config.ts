@@ -1,10 +1,5 @@
-import { defineConfig, devices } from "@playwright/test";
-
-import * as dotenv from "dotenv";
-
-dotenv.config();
-
-const BASE_URL = process.env.BASE_URL;
+import { defineConfig, devices, test } from "@playwright/test";
+import * as fs from "fs";
 
 /**
  * Read environment variables from file.
@@ -35,9 +30,12 @@ export default defineConfig({
     // baseURL: 'http://127.0.0.1:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: "on-first-retry",
+    trace: "retain-on-failure",
     headless: true,
     screenshot: "only-on-failure",
+    geolocation: { latitude: 40.7834, longitude: -73.9662 },
+    locale: "en-UK",
+    permissions: ["geolocation"],
   },
 
   /* Configure projects for major browsers */
@@ -84,4 +82,11 @@ export default defineConfig({
   //   url: 'http://127.0.0.1:3000',
   //   reuseExistingServer: !process.env.CI,
   // },
+});
+
+test.afterEach(async ({ page }, testInfo) => {
+  if (testInfo.status === "failed") {
+    const html = await page.content();
+    fs.writeFileSync(`failed-${testInfo.title.replace(/\s+/g, "_")}.html`, html);
+  }
 });
