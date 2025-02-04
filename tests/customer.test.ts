@@ -6,7 +6,6 @@ import { DepositPage } from "@pages/page_deposit";
 import { orderDetails, paymentDetails } from "@enum/user_data";
 import * as process from "node:process";
 import { getRandomValuesFromDict } from "@helpers/helper_random";
-import * as fs from "fs";
 
 let loginPage: AuthorisePage;
 let ordersPage: OrdersPage;
@@ -58,11 +57,4 @@ test("Create correct order with failed payment wham delete", async () => {
   );
   await depositPage.commitDeposit(cardDetails.cardNumber, cardDetails.expiry, cardDetails.cvv, cardDetails.cardHolder);
   await ordersPage.commitDiscardDraft(requirementsDetails.taskName);
-});
-
-test.afterEach(async ({ page }, testInfo) => {
-  if (testInfo.status === "failed") {
-    const html = await page.content();
-    fs.writeFileSync(`failed-${testInfo.title.replace(/\s+/g, "_")}.html`, html);
-  }
 });

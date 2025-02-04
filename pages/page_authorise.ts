@@ -17,39 +17,47 @@ export class AuthorisePage {
 
   // Locators
 
-  get tabLogIn(): Locator {
+  private get textAwareUK(): Locator {
+    return this.page.getByText("Before proceeding, please be");
+  }
+
+  private get buttonAwareUKContinue(): Locator {
+    return this.page.locator("#cdk-overlay-0").getByRole("button", { name: "Continue" });
+  }
+
+  private get tabLogIn(): Locator {
     return this.page.getByRole("tab", { name: "Log in" });
   }
 
-  get tabSignUp(): Locator {
+  private get tabSignUp(): Locator {
     return this.page.getByRole("tab", { name: "Sign up" });
   }
 
-  get buttonSignInWithEmail(): Locator {
+  private get buttonSignInWithEmail(): Locator {
     return this.page.getByRole("button", { name: "Sign in with email" });
   }
 
-  get buttonSignUpWithEmail(): Locator {
+  private get buttonSignUpWithEmail(): Locator {
     return this.page.getByRole("button", { name: "Sign up with email" });
   }
 
-  get textboxEmail(): Locator {
+  private get textboxEmail(): Locator {
     return this.page.getByRole("textbox", { name: "Enter your email" });
   }
 
-  get textBoxPassword(): Locator {
+  private get textBoxPassword(): Locator {
     return this.page.getByRole("textbox", { name: "Enter your password" });
   }
 
-  get buttonContinue(): Locator {
+  private get buttonContinue(): Locator {
     return this.page.getByRole("button", { name: "Continue" });
   }
 
-  get textTermsAndConditionsLogIn(): Locator {
+  private get textTermsAndConditionsLogIn(): Locator {
     return this.page.getByText("By logging in, you agree to our Terms and Conditions Privacy Policy Refund");
   }
 
-  get textTermsAndConditionsSignUp(): Locator {
+  private get textTermsAndConditionsSignUp(): Locator {
     return this.page.getByText("By creating an account, you agree to the Terms and Conditions Privacy Policy");
   }
 
@@ -57,6 +65,11 @@ export class AuthorisePage {
 
   async navigate(url: string = config.app_url + config.login_endpoint) {
     if (this.page.url() !== url) await this.page.goto(url);
+    if (await this.textAwareUK.isVisible()) await this.buttonAwareUKContinue.isVisible();
+  }
+
+  async clickButtonAwareUKContinue() {
+    await this.buttonAwareUKContinue.click();
   }
 
   async clickTabLogIn() {
