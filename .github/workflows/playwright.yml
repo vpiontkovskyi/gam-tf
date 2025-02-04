@@ -19,14 +19,14 @@ jobs:
         run: npx playwright install --with-deps
       - name: Create .env file
         run: |
-          echo "MAIN_URL=${{ MAIN_URL }}" >> .env
-          echo "BASE_URL=${{ BASE_URL }}" >> .env
+          echo "MAIN_URL=$MAIN_URL" >> .env
+          echo "BASE_URL=$BASE_URL" >> .env
           echo "TEST_USER_EMAIL=${{ secrets.TEST_USER_EMAIL }}" >> .env
           echo "TEST_USER_PASSWORD=${{ secrets.TEST_USER_PASSWORD }}" >> .env
       - name: Run Playwright tests
         env:
-          MAIN_URL: ${{ MAIN_URL }}
-          BASE_URL: ${{ BASE_URL }}
+          MAIN_URL: $MAIN_URL
+          BASE_URL: $BASE_URL
           TEST_USER_LOGIN: ${{ secrets.TEST_USER_LOGIN }}
           TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
         run: npx playwright test --project=chromium
