@@ -25,7 +25,7 @@ export default defineConfig({
   reporter: "html",
   use: {
     trace: "retain-on-failure",
-    headless: false,
+    headless: true,
     screenshot: "only-on-failure",
     geolocation: { latitude: 40.7834, longitude: -73.9662 },
     locale: "en-UK",
