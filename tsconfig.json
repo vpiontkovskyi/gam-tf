@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@pages/*": [
+        "./pages/*"
+      ],
+      "@helpers/*": [
+        "./helpers/*"
+      ],
+      "@data/*": [
+        "./data/*"
+      ],
+      "@enum/*": [
+        "./enum/*"
+      ],
+      "@types/*": [
+        "./types/*"
+      ]
+    },
+    "allowSyntheticDefaultImports": true
+  }
+}

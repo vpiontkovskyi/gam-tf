@@ -1,0 +1,17 @@
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+
+# Personal
+.idea
+.github
+.vale-styles
+.vale.ini
+/tools
+.DS_Store
+.env
