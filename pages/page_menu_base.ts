@@ -19,10 +19,6 @@ export class MenuBasePage {
 
   // Actions
 
-  async clickOrders() {
-    await this.tabOrders.click();
-  }
-
   async verifyOrders() {
     await this.tabOrders.isVisible();
   }

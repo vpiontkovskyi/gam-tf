@@ -17,6 +17,7 @@
       "@types/*": [
         "./types/*"
       ]
-    }
+    },
+    "allowSyntheticDefaultImports": true
   }
 }

@@ -1,8 +1,8 @@
 import { expect, Locator, Page } from "@playwright/test";
+import config, { routes } from "playwright.config";
 
 import { MenuBasePage } from "@pages/page_menu_base";
 import { OrdersPage } from "@pages/page_orders";
-import * as config from "../routs.config";
 
 export class AuthorisePage {
   private page: Page;
@@ -63,13 +63,9 @@ export class AuthorisePage {
 
   // Actions
 
-  async navigate(url: string = config.app_url + config.login_endpoint) {
+  async navigate(url: string = config.use.baseURL + routes.login_endpoint) {
     if (this.page.url() !== url) await this.page.goto(url);
     if (await this.textAwareUK.isVisible()) await this.buttonAwareUKContinue.click();
-  }
-
-  async clickButtonAwareUKContinue() {
-    await this.buttonAwareUKContinue.click();
   }
 
   async clickTabLogIn() {
@@ -99,6 +95,8 @@ export class AuthorisePage {
   async clickButtonContinue() {
     await this.buttonContinue.click();
   }
+
+  // Asserts
 
   async verifyTermsAndConditionsLogIn() {
     await expect(this.textTermsAndConditionsLogIn).toBeVisible();

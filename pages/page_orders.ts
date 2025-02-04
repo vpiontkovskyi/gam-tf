@@ -1,7 +1,8 @@
 import { expect, Locator, Page } from "@playwright/test";
+import config, { routes } from "playwright.config";
+
 import { MenuBasePage } from "@pages/page_menu_base";
 import { DraftPage } from "@pages/page_draft";
-import * as config from "../routs.config";
 
 export class OrdersPage extends MenuBasePage {
   public page: Page;
@@ -37,15 +38,7 @@ export class OrdersPage extends MenuBasePage {
     return this.page.getByText("You have no Active Orders Place order");
   }
 
-  private get buttonDiscardDraftPopupCancel(): Locator {
-    return this.page.getByRole("button", { name: "Cancel" });
-  }
-
-  private get buttonDiscardDraftPopupDelete(): Locator {
-    return this.page.getByRole("button", { name: "Delete" });
-  }
-
-  async navigate(url = config.app_url + config.orders_endpoint) {
+  async navigate(url = config.use.baseURL + routes.orders_endpoint) {
     if (this.page.url() !== url) {
       // FIXME: remove timeout
       await this.page.waitForTimeout(1000);
@@ -59,55 +52,15 @@ export class OrdersPage extends MenuBasePage {
     await this.tabOrdersActive.click();
   }
 
+  private get buttonDiscardDraftPopupCancel(): Locator {
+    return this.page.getByRole("button", { name: "Cancel" });
+  }
+
+  private get buttonDiscardDraftPopupDelete(): Locator {
+    return this.page.getByRole("button", { name: "Delete" });
+  }
+
   // Actions
-
-  async clickOrdersDrafts() {
-    await this.tabOrdersDrafts.click();
-  }
-
-  async clickOrdersClosed() {
-    await this.tabOrdersClosed.click();
-  }
-
-  async clickOrderCard(topic: string) {
-    await this.panelOrderCard(topic).click();
-  }
-
-  async hoverOrderCardMenu(topic: string) {
-    await this.panelOrderCardMenu(topic).hover();
-  }
-
-  async clickOrderCardMenuDiscard() {
-    await this.buttonOrderCardMenuDiscard.click();
-  }
-
-  async clickDiscardDraftPopupCancel() {
-    await this.buttonDiscardDraftPopupCancel.click();
-  }
-
-  async clickDiscardDraftPopupDelete() {
-    await this.buttonDiscardDraftPopupDelete.click();
-  }
-
-  async verifyDontHaveOrdersPanel() {
-    await expect(this.blockDontHaveOrders).toBeVisible();
-  }
-
-  async verifyOrderPanel(topic: string) {
-    await expect(this.panelOrderCard(topic)).toBeVisible();
-  }
-
-  async verifyOrderCardMenuDiscard() {
-    await expect(this.buttonOrderCardMenuDiscard).toBeVisible();
-  }
-
-  async verifyDiscardDraftPopupCancel() {
-    await expect(this.buttonDiscardDraftPopupCancel).toBeVisible();
-  }
-
-  async verifyDiscardDraftPopupDelete() {
-    await expect(this.buttonDiscardDraftPopupDelete).toBeVisible();
-  }
 
   async openNewOrder() {
     await this.navigate();
@@ -137,6 +90,56 @@ export class OrdersPage extends MenuBasePage {
     }
   }
 
+  async clickOrdersDrafts() {
+    await this.tabOrdersDrafts.click();
+  }
+
+  async clickOrdersClosed() {
+    await this.tabOrdersClosed.click();
+  }
+
+  async clickOrderCard(topic: string) {
+    await this.panelOrderCard(topic).click();
+  }
+
+  async hoverOrderCardMenu(topic: string) {
+    await this.panelOrderCardMenu(topic).hover();
+  }
+
+  async clickOrderCardMenuDiscard() {
+    await this.buttonOrderCardMenuDiscard.click();
+  }
+
+  async clickDiscardDraftPopupCancel() {
+    await this.buttonDiscardDraftPopupCancel.click();
+  }
+
+  async clickDiscardDraftPopupDelete() {
+    await this.buttonDiscardDraftPopupDelete.click();
+  }
+
+  // Asserts
+
+  async verifyDontHaveOrdersPanel() {
+    await expect(this.blockDontHaveOrders).toBeVisible();
+  }
+
+  async verifyOrderPanel(topic: string) {
+    await expect(this.panelOrderCard(topic)).toBeVisible();
+  }
+
+  async verifyOrderCardMenuDiscard() {
+    await expect(this.buttonOrderCardMenuDiscard).toBeVisible();
+  }
+
+  async verifyDiscardDraftPopupCancel() {
+    await expect(this.buttonDiscardDraftPopupCancel).toBeVisible();
+  }
+
+  async verifyDiscardDraftPopupDelete() {
+    await expect(this.buttonDiscardDraftPopupDelete).toBeVisible();
+  }
+
   // Clients
 
   async navigateToDrafts(topic: string) {
@@ -157,6 +160,14 @@ export class OrdersPage extends MenuBasePage {
     } finally {
       expect(is_loaded).toBe(true);
     }
+  }
+
+  private panelOrderCard(topic: string): Locator {
+    return this.page.getByRole("link", { name: topic });
+  }
+
+  private panelOrderCardMenu(topic: string): Locator {
+    return this.page.getByRole("link", { name: topic }).getByRole("button");
   }
 
   async navigateToClosed(topic: string) {
@@ -187,15 +198,5 @@ export class OrdersPage extends MenuBasePage {
     await this.verifyDiscardDraftPopupCancel();
     await this.verifyDiscardDraftPopupDelete();
     await this.clickDiscardDraftPopupDelete();
-  }
-
-  private panelOrderCard(topic: string): Locator {
-    return this.page.getByRole("link", { name: topic });
-  }
-
-  // Clients
-
-  private panelOrderCardMenu(topic: string): Locator {
-    return this.page.getByRole("link", { name: topic }).getByRole("button");
   }
 }

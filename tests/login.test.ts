@@ -1,7 +1,7 @@
 import { test } from "@playwright/test";
 import { MainPage } from "@pages/page_main";
 import { AuthorisePage } from "@pages/page_authorise";
-import * as config from "../routs.config";
+import * as process from "node:process";
 
 let mainPage: MainPage;
 let loginPage: AuthorisePage;
@@ -12,7 +12,7 @@ test.beforeEach(async ({ page }) => {
   await mainPage.navigate();
 });
 
-test("Login with correct password", async () => {
+test("Login with correct credentials", async () => {
   await mainPage.clickLogInButton();
-  await loginPage.commitLoginWithEmail(config.test_user_email, config.test_user_password);
+  await loginPage.commitLoginWithEmail(process.env.TEST_USER_EMAIL, process.env.TEST_USER_PASSWORD);
 });

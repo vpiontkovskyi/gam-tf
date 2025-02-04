@@ -1,6 +1,7 @@
 import { expect, Locator, Page } from "@playwright/test";
+import config, { routes } from "playwright.config";
+
 import { getDayPlusNDays, getMonthNumber, isDayInCurrentMonth } from "@helpers/helper_date";
-import * as config from "../routs.config";
 
 export class DraftPage {
   private page: Page;
@@ -13,10 +14,6 @@ export class DraftPage {
 
   private get buttonNext(): Locator {
     return this.page.getByRole("button", { name: /^Next$/ });
-  }
-
-  private get buttonSave(): Locator {
-    return this.page.getByRole("button", { name: "Save" });
   }
 
   private get dropdownContentType(): Locator {
@@ -70,16 +67,70 @@ export class DraftPage {
     return this.page.getByRole("button", { name: /^Confirm$/ }).nth(1);
   }
 
-  async navigate(url = config.app_url + config.create_draft_endpoint) {
+  async navigate(url = config.use.baseURL + routes.create_draft_endpoint) {
     if (this.page.url() !== url) await this.page.goto(url);
+  }
+
+  async completeService(service: string) {
+    await this.buttonService(service).click();
+  }
+
+  async completeLanguage(language: string) {
+    await this.buttonLanguage(language).click();
+  }
+
+  async completeSize(size: string) {
+    await this.fillSize(size);
+  }
+
+  async completeTopic(topicText: string) {
+    await this.fillTopic(topicText);
+  }
+
+  async completeRequirements(requirements: string) {
+    await this.fillRequirements(requirements);
+  }
+
+  private buttonSummaryContentType(contentType: string): Locator {
+    return this.page.getByRole("button", { name: `Content type ${contentType}` });
+  }
+
+  private buttonSummaryService(service: string): Locator {
+    return this.page.getByRole("button", { name: `Service ${service}` });
+  }
+
+  private buttonSummaryLanguage(language: string): Locator {
+    return this.page.getByRole("button", { name: `Language ${language}` });
+  }
+
+  private buttonSummarySize(size: string): Locator {
+    return this.page.getByRole("button", { name: `Size ${size} slides` });
+  }
+
+  private buttonSummaryDeadline(period: number): Locator {
+    return this.page.getByRole("button", { name: RegExp(`Deadline.*\\(In\\s+${period}\\s+days\\)`) });
+  }
+
+  private buttonSummaryTopic(topicText: string): Locator {
+    return this.page.getByRole("button", { name: `Topic ${topicText}` });
+  }
+
+  private buttonSummaryTheme(theme: string): Locator {
+    return this.page.getByRole("button", { name: `Theme ${theme}` });
+  }
+
+  private buttonSummaryRequirements(requirements: string): Locator {
+    return this.page.getByRole("button", { name: `Content requirements ${requirements}` });
+  }
+
+  // Actions
+
+  private buttonSummaryPrice(price: string): Locator {
+    return this.page.getByText(`Estimated price: $${price}`);
   }
 
   async clickNext() {
     await this.buttonNext.click();
-  }
-
-  async clickSave() {
-    await this.buttonSave.click();
   }
 
   async clickDropdownContent() {
@@ -126,8 +177,6 @@ export class DraftPage {
     await this.buttonDeadlineDay(futureDay, futureMonth).click();
   }
 
-  // Actions
-
   async clickDeadlineTime() {
     await this.buttonDeadlineTime.click();
   }
@@ -155,6 +204,28 @@ export class DraftPage {
   async clickConfirm() {
     await this.buttonConfirm.click();
   }
+
+  private elementContentType(contentType: string): Locator {
+    return this.page.getByTitle(contentType, { exact: true });
+  }
+
+  private buttonService(service: string): Locator {
+    return this.page.getByText(service, { exact: true });
+  }
+
+  private buttonLanguage(language: string): Locator {
+    return this.page.locator("label").filter({ hasText: language });
+  }
+
+  private buttonDeadlineDay(futureDay: number, futureMonth: number): Locator {
+    return this.page.getByTitle(`${futureMonth}/${futureDay}/`).locator("div");
+  }
+
+  private elementTheme(theme: string): Locator {
+    return this.page.locator("subject-select-not-found div").filter({ hasText: theme }).nth(2);
+  }
+
+  // Asserts
 
   async verifyContentType() {
     await expect(this.textboxContentType).toBeVisible();
@@ -196,23 +267,13 @@ export class DraftPage {
     await expect(this.buttonSummaryPrice(price)).toBeVisible();
   }
 
+  // Clients
+
   async completeContent(contentType: string) {
     await this.clickDropdownContent();
     await this.clickTextboxContent();
     await this.fillContentType(contentType);
     await this.selectContentType(contentType);
-  }
-
-  async completeService(service: string) {
-    await this.buttonService(service).click();
-  }
-
-  async completeLanguage(language: string) {
-    await this.buttonLanguage(language).click();
-  }
-
-  async completeSize(size: string) {
-    await this.fillSize(size);
   }
 
   async completeDeadlineDateTime(period: number) {
@@ -225,18 +286,10 @@ export class DraftPage {
     await this.clickDeadlineTime();
   }
 
-  async completeTopic(topicText: string) {
-    await this.fillTopic(topicText);
-  }
-
   async completeTheme(theme: string) {
     await this.clickTheme();
     await this.fillTheme(theme);
     await this.selectThemeType(theme);
-  }
-
-  async completeRequirements(requirements: string) {
-    await this.fillRequirements(requirements);
   }
 
   async commitDraft(
@@ -274,63 +327,5 @@ export class DraftPage {
     await this.verifySummaryRequirements(requirements);
     await this.verifySummaryPrice(price);
     await this.clickConfirm();
-  }
-
-  private elementContentType(contentType: string): Locator {
-    return this.page.getByTitle(contentType, { exact: true });
-  }
-
-  private buttonService(service: string): Locator {
-    return this.page.getByText(service, { exact: true });
-  }
-
-  private buttonLanguage(language: string): Locator {
-    return this.page.locator("label").filter({ hasText: language });
-  }
-
-  private buttonDeadlineDay(futureDay: number, futureMonth: number): Locator {
-    return this.page.getByTitle(`${futureMonth}/${futureDay}/`).locator("div");
-  }
-
-  private elementTheme(theme: string): Locator {
-    return this.page.locator("subject-select-not-found div").filter({ hasText: theme }).nth(2);
-  }
-
-  // Clients
-
-  private buttonSummaryContentType(contentType: string): Locator {
-    return this.page.getByRole("button", { name: `Content type ${contentType}` });
-  }
-
-  private buttonSummaryService(service: string): Locator {
-    return this.page.getByRole("button", { name: `Service ${service}` });
-  }
-
-  private buttonSummaryLanguage(language: string): Locator {
-    return this.page.getByRole("button", { name: `Language ${language}` });
-  }
-
-  private buttonSummarySize(size: string): Locator {
-    return this.page.getByRole("button", { name: `Size ${size} slides` });
-  }
-
-  private buttonSummaryDeadline(period: number): Locator {
-    return this.page.getByRole("button", { name: RegExp(`Deadline.*\\(In\\s+${period}\\s+days\\)`) });
-  }
-
-  private buttonSummaryTopic(topicText: string): Locator {
-    return this.page.getByRole("button", { name: `Topic ${topicText}` });
-  }
-
-  private buttonSummaryTheme(theme: string): Locator {
-    return this.page.getByRole("button", { name: `Theme ${theme}` });
-  }
-
-  private buttonSummaryRequirements(requirements: string): Locator {
-    return this.page.getByRole("button", { name: `Content requirements ${requirements}` });
-  }
-
-  private buttonSummaryPrice(price: string): Locator {
-    return this.page.getByText(`Estimated price: $${price}`);
   }
 }

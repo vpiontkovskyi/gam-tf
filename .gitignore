@@ -14,3 +14,4 @@ node_modules/
 .vale.ini
 /tools
 .DS_Store
+.env
