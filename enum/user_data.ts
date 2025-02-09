@@ -14,7 +14,7 @@ export const draftDetails: interfaces_base.draftDetails = {
   language: language.englishUS,
   size: "5",
   period: 14,
-  topicText: "PIONTKOVSKYI ",
+  topicText: "PIONTKOVSKYI TASK",
   theme: theme.english,
   requirements: "Test Requirements",
   price: "50",

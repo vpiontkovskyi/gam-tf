@@ -7,10 +7,11 @@ The author does not have extensive experience with TypeScript, so the solution m
 risk.
 
 ## Features
-- **Test Automation**: Built using [Playwright](https://playwright.dev/), a powerful test automation framework.
-- **Environment Support**: Manage environment variables with [dotenv](https://github.com/motdotla/dotenv).
-- **Code Formatting**: Maintain code quality with [Prettier](https://prettier.io/).
-- **Reports** by [Playwright](https://playwright.dev/)
+
+- **Test Automation**: Built using [Playwright](https://playwright.dev/);
+- **Environment Support**: Manage environment variables with [dotenv](https://github.com/motdotla/dotenv);
+- **Code Formatting**: Maintain code quality with [Prettier](https://prettier.io/);
+- **Reports** by [Playwright](https://playwright.dev/).
 ---
 
 ## Requirements
@@ -28,12 +29,14 @@ To install the dependencies, run:
 ---
 
 ## Directory Structure
-- **`/tests`**: Directory containing all your test scripts and E2E test cases.
-- **`/pages`**: Page objects and a bit more
-- **`/playwright-report`** - **`/test-results`**: contain HTML and JSON reports, screenshots and state traces
-- **`/helpers`**: some helpers for randomise and math date
-- **`/enum`**: will be refactored in the future cause folder contain not only enums
-  Some files have FIXME and TODO breadcrumbs, its will be refactored soon too
+
+- **`/tests`**: Directory containing all your test scripts and E2E test cases;
+- **`/pages`**: Page objects and a bit more;
+- **`/playwright-report`** - **`/test-results`**: contain HTML and JSON reports, screenshots, and state traces;
+- **`/helpers`**: some helpers for randomizing and math date;
+- **`/enum`**: for providing test data;
+- **`/interfaces`**: for providing an interface pattern to validate data types;
+  Some files have FIXME and TODO breadcrumbs, its will be refactored soon.
 Feel free to extend or customize the directory structure as needed for your project.
 ---
 
@@ -47,7 +50,7 @@ Feel free to extend or customize the directory structure as needed for your proj
     ```
 2. **Write Tests**:
    Write your Playwright tests in the `tests` directory.
-3. Right now must **choice credentials** for the test account.
+3. Right now must **choose credentials** for the test account.
    The framework requires creating an empty test account with a confirmed email.
    The email and password should be **specified** as parameters before starting.
    The for local test run command will look like this:
@@ -58,13 +61,11 @@ Feel free to extend or customize the directory structure as needed for your proj
 
 ### Review report and debug
 
-1. If you want to open a report just run command:
+1. If you want to open a report, run the command:
    ```bash
    npx playwright show-report
    ```
-
-You can download artifacts from CI and paste report files to `playwright-report` folder for review report form CI.
-
+   You can download artifacts from CI and paste report files to `playwright-report` folder for review report form CI.
 2. To run the debug instance of the browser with Playwright inspector, run command:
    ```bash
    npx playwright test --debug
