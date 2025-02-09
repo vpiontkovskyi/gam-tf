@@ -2,17 +2,14 @@ import { expect, Locator, Page } from "@playwright/test";
 import config, { routes } from "playwright.config";
 
 import { MenuBasePage } from "@pages/page_menu_base";
-import { DraftPage } from "@pages/page_draft";
 
 export class AuthorisePage {
   private page: Page;
   private menuBasePage: MenuBasePage;
-  private draftPage: DraftPage;
 
   constructor(page: Page) {
     this.page = page;
     this.menuBasePage = new MenuBasePage(page);
-    this.draftPage = new DraftPage(page);
   }
 
   // Locators
