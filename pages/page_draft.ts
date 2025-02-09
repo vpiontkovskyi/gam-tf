@@ -2,6 +2,7 @@ import { expect, Locator, Page } from "@playwright/test";
 import config, { routes } from "playwright.config";
 
 import { getDayPlusNDays, getMonthNumber, isDayInCurrentMonth } from "@helpers/helper_date";
+import * as interfaces_base from "@interfaces/interfaces_base";
 
 export class DraftPage {
   private page: Page;
@@ -26,14 +27,6 @@ export class DraftPage {
 
   private get textboxSize(): Locator {
     return this.page.getByRole("textbox");
-  }
-
-  private get buttonSizePlus(): Locator {
-    return this.page.locator("nz-form-control").getByRole("button").nth(1);
-  }
-
-  private get buttonSizeMinus(): Locator {
-    return this.page.locator("nz-form-control").getByRole("button").first();
   }
 
   private get buttonDeadlineDate(): Locator {
@@ -149,20 +142,8 @@ export class DraftPage {
     await this.elementContentType(contentType).click();
   }
 
-  async clickPlusSize() {
-    await this.buttonSizePlus.click();
-  }
-
-  async clickMinusSize() {
-    await this.buttonSizeMinus.click();
-  }
-
   async fillSize(size: string) {
     await this.textboxSize.fill(size);
-  }
-
-  async getSize() {
-    return this.textboxSize.inputValue();
   }
 
   async clickDeadlineDate() {
@@ -292,40 +273,30 @@ export class DraftPage {
     await this.selectThemeType(theme);
   }
 
-  async commitDraft(
-    contentType: string,
-    service: string,
-    language: string,
-    size: string,
-    period: number,
-    topicText: string,
-    theme: string,
-    requirements: string,
-    price: string,
-  ) {
+  async commitDraft(draftDetails: interfaces_base.draftDetails) {
     await this.navigate();
-    await this.completeContent(contentType);
-    await this.completeService(service);
-    await this.completeLanguage(language);
-    await this.completeSize(size);
+    await this.completeContent(draftDetails.contentType);
+    await this.completeService(draftDetails.service);
+    await this.completeLanguage(draftDetails.language);
+    await this.completeSize(draftDetails.size);
     await this.clickNext();
-    await this.completeDeadlineDateTime(period);
+    await this.completeDeadlineDateTime(draftDetails.period);
     await this.clickNext();
-    await this.completeTopic(topicText);
+    await this.completeTopic(draftDetails.topicText);
     await this.clickNext();
-    await this.completeTheme(theme);
+    await this.completeTheme(draftDetails.theme);
     await this.clickNext();
-    await this.completeRequirements(requirements);
+    await this.completeRequirements(draftDetails.requirements);
     await this.clickNext();
-    await this.verifySummaryContentType(contentType);
-    await this.verifySummaryService(service);
-    await this.verifySummaryLanguage(language);
-    await this.verifySummarySize(size);
-    await this.verifySummaryDeadlineDateTime(period);
-    await this.verifySummaryTopic(topicText);
-    await this.verifySummaryTheme(theme);
-    await this.verifySummaryRequirements(requirements);
-    await this.verifySummaryPrice(price);
+    await this.verifySummaryContentType(draftDetails.contentType);
+    await this.verifySummaryService(draftDetails.service);
+    await this.verifySummaryLanguage(draftDetails.language);
+    await this.verifySummarySize(draftDetails.size);
+    await this.verifySummaryDeadlineDateTime(draftDetails.period);
+    await this.verifySummaryTopic(draftDetails.topicText);
+    await this.verifySummaryTheme(draftDetails.theme);
+    await this.verifySummaryRequirements(draftDetails.requirements);
+    await this.verifySummaryPrice(draftDetails.price);
     await this.clickConfirm();
   }
 }

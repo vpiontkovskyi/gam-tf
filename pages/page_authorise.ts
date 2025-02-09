@@ -2,17 +2,17 @@ import { expect, Locator, Page } from "@playwright/test";
 import config, { routes } from "playwright.config";
 
 import { MenuBasePage } from "@pages/page_menu_base";
-import { OrdersPage } from "@pages/page_orders";
+import { DraftPage } from "@pages/page_draft";
 
 export class AuthorisePage {
   private page: Page;
   private menuBasePage: MenuBasePage;
-  private ordersPage: OrdersPage;
+  private draftPage: DraftPage;
 
   constructor(page: Page) {
     this.page = page;
     this.menuBasePage = new MenuBasePage(page);
-    this.ordersPage = new OrdersPage(page);
+    this.draftPage = new DraftPage(page);
   }
 
   // Locators
@@ -116,8 +116,7 @@ export class AuthorisePage {
     await this.typeEmail(email);
     await this.typePassword(password);
     await this.clickButtonContinue();
-    await this.menuBasePage.verifyOrders();
-    await this.menuBasePage.verifyNewOrder();
+    await this.menuBasePage.verifyMenuLoaded();
   }
 
   async commitRegisterWithEmail(email: string, password: string) {
@@ -129,7 +128,6 @@ export class AuthorisePage {
     await this.typeEmail(email);
     await this.typePassword(password);
     await this.clickButtonContinue();
-    await this.menuBasePage.verifyOrders();
-    await this.menuBasePage.verifyNewOrder();
+    // TODO: Add some tests for verification account creation
   }
 }

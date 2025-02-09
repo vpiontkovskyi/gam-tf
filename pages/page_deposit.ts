@@ -1,4 +1,5 @@
 import { Locator, Page } from "@playwright/test";
+import * as interfaces_base from "@interfaces/interfaces_base";
 
 export class DepositPage {
   private page: Page;
@@ -95,13 +96,13 @@ export class DepositPage {
 
   // Clients
 
-  async commitDeposit(CCNumber: string, exDate: string, CVV: string, fullName: string) {
+  async commitDeposit(cardDetails: interfaces_base.cardDetails) {
     await this.checkIAgree();
     await this.clickProceed();
-    await this.fillCreditCardNumber(CCNumber);
-    await this.fillExDate(exDate);
-    await this.fillCVV(CVV);
-    await this.fillFullName(fullName);
+    await this.fillCreditCardNumber(cardDetails.CCNumber);
+    await this.fillExDate(cardDetails.exDate);
+    await this.fillCVV(cardDetails.CVV);
+    await this.fillFullName(cardDetails.fullName);
     await this.clickProceedIframe();
     await this.messagePaymentFailed.isVisible();
     await this.clickClose();

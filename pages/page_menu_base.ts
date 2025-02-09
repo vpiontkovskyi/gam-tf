@@ -1,4 +1,4 @@
-import { Locator, Page } from "@playwright/test";
+import { expect, Locator, Page } from "@playwright/test";
 
 export class MenuBasePage {
   public page: Page;
@@ -19,15 +19,29 @@ export class MenuBasePage {
 
   // Actions
 
-  async verifyOrders() {
-    await this.tabOrders.isVisible();
-  }
-
   async clickNewOrder() {
     await this.buttonNewOrder.click();
   }
 
+  // Asserts
+
+  async verifyOrders() {
+    await expect(this.tabOrders).toBeVisible();
+  }
+
   async verifyNewOrder() {
-    await this.buttonNewOrder.isVisible({ timeout: 1000 });
+    await expect(this.buttonNewOrder).toBeVisible();
+  }
+
+  async verifyMenuLoaded() {
+    const isButtonNewOrder = await this.tabOrders
+      .waitFor({ timeout: 2000 })
+      .then(() => true)
+      .catch(() => false);
+    const isTabOrders = await this.tabOrders
+      .waitFor({ timeout: 2000 })
+      .then(() => true)
+      .catch(() => false);
+    expect(isButtonNewOrder || isTabOrders).toBe(true);
   }
 }

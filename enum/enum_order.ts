@@ -1,13 +1,12 @@
 // TODO: add all values
-// TODO: add more usages in pages
-export const title = {
+export const contentType = {
   powerPointPresentation: "PowerPoint presentation",
   discussionPost: "Discussion post",
   powerPointPresentationWithSpeakerNotes: "PowerPoint presentation with speaker notes",
   multipleChoiceQuestions: "Multiple choice questions",
 };
 
-export const category = {
+export const service = {
   writing: "Writing",
   reviewing: "Reviewing",
   editing: "Editing",
