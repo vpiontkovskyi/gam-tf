@@ -1,32 +1,15 @@
-// TODO: add all values
-export const contentType = {
-  powerPointPresentation: "PowerPoint presentation",
-  discussionPost: "Discussion post",
-  powerPointPresentationWithSpeakerNotes: "PowerPoint presentation with speaker notes",
-  multipleChoiceQuestions: "Multiple choice questions",
-};
+export enum contentType {
+  powerPointPresentation = "PowerPoint presentation",
+}
 
-export const service = {
-  writing: "Writing",
-  reviewing: "Reviewing",
-  editing: "Editing",
-};
+export enum service {
+  writing = "Writing",
+}
 
-export const language = {
-  englishUS: "English (US)",
-  englishUK: "English (UK)",
-  spanish: "Spanish (ES)",
-  french: "French (FR)",
-};
+export enum language {
+  englishUS = "English (US)",
+}
 
-export const theme = {
-  art: "Art",
-  logistics: "Logistics",
-  code: "Code",
-  english: "English",
-  programming: "Programming",
-  engineering: "Engineering",
-  telecommunications: "Telecommunications",
-  literature: "Literature",
-  education: "Education",
-};
+export enum theme {
+  english = "English",
+}
