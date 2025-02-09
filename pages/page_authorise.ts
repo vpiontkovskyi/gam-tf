@@ -65,7 +65,7 @@ export class AuthorisePage {
 
   async navigate(url: string = config.use.baseURL + routes.login_endpoint) {
     if (this.page.url() !== url) await this.page.goto(url);
-    if (await this.textAwareUK.isVisible({ timeout: 1000 })) await this.buttonAwareUKContinue.click({ timeout: 1000 });
+    if (await this.textAwareUK.isVisible({ timeout: 1000 })) await this.buttonAwareUKContinue.click({ timeout: 1000 }); // Fix for UK region popup. Must be implemented.
   }
 
   async clickTabLogIn() {
