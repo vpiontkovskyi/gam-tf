@@ -18,16 +18,8 @@ export class OrdersPage extends MenuBasePage {
 
   // Locators
 
-  private get tabOrdersActive(): Locator {
-    return this.page.getByRole("link", { name: "Active" });
-  }
-
   private get tabOrdersDrafts(): Locator {
     return this.page.getByRole("link", { name: "Drafts" });
-  }
-
-  private get tabOrdersClosed(): Locator {
-    return this.page.getByRole("link", { name: "Closed" });
   }
 
   private get buttonOrderCardMenuDiscard(): Locator {
@@ -38,18 +30,8 @@ export class OrdersPage extends MenuBasePage {
     return this.page.getByText("You have no Active Orders Place order");
   }
 
-  async navigate(url = config.use.baseURL + routes.orders_endpoint) {
-    if (this.page.url() !== url) {
-      // FIXME: remove timeout
-      await this.page.waitForTimeout(1000);
-      await this.page.goto(url);
-      await this.menuBasePage.verifyOrders();
-      await this.menuBasePage.verifyNewOrder();
-    }
-  }
-
-  async clickOrdersActive() {
-    await this.tabOrdersActive.click();
+  private panelOrderCard(topic: string): Locator {
+    return this.page.getByRole("link", { name: topic });
   }
 
   private get buttonDiscardDraftPopupCancel(): Locator {
@@ -60,46 +42,21 @@ export class OrdersPage extends MenuBasePage {
     return this.page.getByRole("button", { name: "Delete" });
   }
 
-  // Actions
-
-  async openNewOrder() {
-    await this.navigate();
-    await this.verifyOrders();
-    await this.verifyNewOrder();
-    await this.clickNewOrder();
-    await this.draftPage.verifyContentType();
+  private panelOrderCardMenu(topic: string): Locator {
+    return this.page.getByRole("link", { name: topic }).getByRole("button");
   }
 
-  async navigateToActive(topic: string) {
-    await this.navigate();
-    await this.verifyOrders();
-    await this.verifyNewOrder();
-    await this.clickOrdersActive();
-
-    // TODO: Make this simple
-    let is_loaded: boolean = false;
-    try {
-      await this.verifyDontHaveOrdersPanel();
-      is_loaded = true;
-    } catch (e) {}
-    try {
-      await this.verifyOrderPanel(topic);
-      is_loaded = true;
-    } finally {
-      expect(is_loaded).toBe(true);
+  // Actions
+  async navigate(url = config.use.baseURL + routes.orders_endpoint) {
+    if (this.page.url() !== url) {
+      await this.page.goto(url);
+      await this.menuBasePage.verifyOrders();
+      await this.menuBasePage.verifyNewOrder();
     }
   }
 
   async clickOrdersDrafts() {
     await this.tabOrdersDrafts.click();
-  }
-
-  async clickOrdersClosed() {
-    await this.tabOrdersClosed.click();
-  }
-
-  async clickOrderCard(topic: string) {
-    await this.panelOrderCard(topic).click();
   }
 
   async hoverOrderCardMenu(topic: string) {
@@ -110,23 +67,11 @@ export class OrdersPage extends MenuBasePage {
     await this.buttonOrderCardMenuDiscard.click();
   }
 
-  async clickDiscardDraftPopupCancel() {
-    await this.buttonDiscardDraftPopupCancel.click();
-  }
-
   async clickDiscardDraftPopupDelete() {
     await this.buttonDiscardDraftPopupDelete.click();
   }
 
   // Asserts
-
-  async verifyDontHaveOrdersPanel() {
-    await expect(this.blockDontHaveOrders).toBeVisible();
-  }
-
-  async verifyOrderPanel(topic: string) {
-    await expect(this.panelOrderCard(topic)).toBeVisible();
-  }
 
   async verifyOrderCardMenuDiscard() {
     await expect(this.buttonOrderCardMenuDiscard).toBeVisible();
@@ -140,54 +85,34 @@ export class OrdersPage extends MenuBasePage {
     await expect(this.buttonDiscardDraftPopupDelete).toBeVisible();
   }
 
+  async verifyOrdersLoaded(topic: string) {
+    const isPanelVisible = await this.panelOrderCard(topic)
+      .waitFor({ timeout: 1000 })
+      .then(() => true)
+      .catch(() => false);
+    const isNoOrdersVisible = await this.blockDontHaveOrders
+      .waitFor({ timeout: 1000 })
+      .then(() => true)
+      .catch(() => false);
+    expect(isPanelVisible || isNoOrdersVisible).toBe(true);
+  }
+
   // Clients
+
+  async openNewOrder() {
+    await this.navigate();
+    await this.verifyOrders();
+    await this.verifyNewOrder();
+    await this.clickNewOrder();
+    await this.draftPage.verifyContentType();
+  }
 
   async navigateToDrafts(topic: string) {
     await this.navigate();
     await this.verifyOrders();
     await this.verifyNewOrder();
     await this.clickOrdersDrafts();
-
-    // TODO: Make this simple
-    let is_loaded: boolean = false;
-    try {
-      await this.verifyDontHaveOrdersPanel();
-      is_loaded = true;
-    } catch (e) {}
-    try {
-      await this.verifyOrderPanel(topic);
-      is_loaded = true;
-    } finally {
-      expect(is_loaded).toBe(true);
-    }
-  }
-
-  private panelOrderCard(topic: string): Locator {
-    return this.page.getByRole("link", { name: topic });
-  }
-
-  private panelOrderCardMenu(topic: string): Locator {
-    return this.page.getByRole("link", { name: topic }).getByRole("button");
-  }
-
-  async navigateToClosed(topic: string) {
-    await this.navigate();
-    await this.verifyOrders();
-    await this.verifyNewOrder();
-    await this.clickOrdersClosed();
-
-    // TODO: Make this simple
-    let is_loaded: boolean = false;
-    try {
-      await this.verifyDontHaveOrdersPanel();
-      is_loaded = true;
-    } catch (e) {}
-    try {
-      await this.verifyOrderPanel(topic);
-      is_loaded = true;
-    } finally {
-      expect(is_loaded).toBe(true);
-    }
+    await this.verifyOrdersLoaded(topic);
   }
 
   async commitDiscardDraft(topic: string) {
